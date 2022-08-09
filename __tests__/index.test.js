@@ -17,10 +17,15 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 let data;
 
 beforeAll(async () => {
+  downloadPage(path.join(__dirname, '..', '__fixtures__'), 'https://ru.hexlet.io/courses');
   data = await fsp.readFile(getFixturePath('ru-hexlet-io-courses.html'));
 });
 
-test('Download page', async () => {
+// afterAll(() => {
+//   fsp.unlink(getFixturePath('ru-hexlet-io-courses.html'));
+// })
+
+test('Dont download page', async () => {
 //   nock(/ru\.hexlet\.io/)
 //     .get(/courses/)
 //     .reply(200, data);
