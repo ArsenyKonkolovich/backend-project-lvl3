@@ -5,7 +5,7 @@
   "description": "[![Actions Status](https://github.com/ArsenyKonkolovich/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/ArsenyKonkolovich/backend-project-lvl3/actions)",
   "main": "src/index.js",
   "bin": {
-    "pageLoader": "bin/pageLoader.js"
+    "page-loader": "bin/pageLoader.js"
   },
   "scripts": {
     "test": "npx jest"
