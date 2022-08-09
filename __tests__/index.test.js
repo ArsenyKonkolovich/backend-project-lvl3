@@ -24,7 +24,7 @@ beforeAll(async () => {
 //   fsp.unlink(getFixturePath('ru-hexlet-io-courses.html'));
 // })
 
-test('Dont download page', async () => {
+test('Download page', async () => {
 //   nock(/ru\.hexlet\.io/)
 //     .get(/courses/)
 //     .reply(200, data);
@@ -34,7 +34,7 @@ test('Dont download page', async () => {
   expect(expected).toEqual(actual);
 });
 
-test('Downloading page', async () => {
+test('Dont downloading page', async () => {
   const expected1 = downloadPage('blablabla', 'https://ru.hexlet.io/courses');
   expect(expected1).toThrow();
 });
