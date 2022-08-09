@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
+import multiply from '../src/index.js';
 
-test('Prime', () => {
-  const actual = 1;
-  expect(actual).toBe(1);
+test('Multiply', () => {
+  const actual = multiply(2, 2);
+  expect(actual).toBe(4);
 });
