@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
+import { cwd } from 'node:process';
 import { Command } from 'commander/esm.mjs';
+import { downloadPage } from '../src/index.js';
 
 const program = new Command();
 
 program
   .version('0.0.1', '-V, --version', 'output the version number')
   .description('Page loader utility')
-  .option('-o, --output [dir]', 'output dir', '/home/user/current-dir');
-//   .arguments('<filepath1>')
-//   .arguments('<filepath2>')
-//   .action((filepath1, filepath2) => {
-//     const options = program.opts();
-//     const diff = genDiff(filepath1, filepath2, options.format);
-//     console.log(diff);
-//   });
+  .option('-o, --output [dir]', 'output dir', `${cwd()}`)
+  .arguments('<url>')
+  .action((url) => {
+    const options = program.opts();
+    downloadPage(options.output, url);
+    console.log('Done!');
+  });
 program.parse(process.argv);
