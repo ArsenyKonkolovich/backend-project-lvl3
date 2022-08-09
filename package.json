@@ -1,0 +1,32 @@
+{
+  "name": "backend-project-lvl3",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "[![Actions Status](https://github.com/ArsenyKonkolovich/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/ArsenyKonkolovich/backend-project-lvl3/actions)",
+  "main": "src/index.js",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
+  "scripts": {
+    "test": "npx jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArsenyKonkolovich/backend-project-lvl3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArsenyKonkolovich/backend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/ArsenyKonkolovich/backend-project-lvl3#readme",
+  "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.3"
+  },
+  "dependencies": {
+    "commander": "^9.4.0"
+  }
+}
