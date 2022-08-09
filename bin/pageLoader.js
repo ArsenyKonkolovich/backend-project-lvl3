@@ -2,7 +2,7 @@
 
 import { cwd } from 'node:process';
 import { Command } from 'commander/esm.mjs';
-import { downloadPage } from '../src/index.js';
+import downloadPage from '../src/index.js';
 
 const program = new Command();
 
