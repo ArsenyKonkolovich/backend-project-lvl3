@@ -14,14 +14,14 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 // const readFile = (dir, file) => fsp.readFile(path.join(dir, file));
 // const getPath = (dirname, filename) => path.join(dirname, filename);
 
-let data;
+// let data;
 const pampam = 'data';
 
 nock.disableNetConnect();
 
-beforeAll(async () => {
-  data = await fsp.readFile(getFixturePath('ru-hexlet-io-courses.html'));
-});
+// beforeAll(async () => {
+//   data = await fsp.readFile(getFixturePath('ru-hexlet-io-courses.html'));
+// });
 
 afterAll(() => {
   fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
