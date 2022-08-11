@@ -30,7 +30,7 @@ test('Download page', async () => {
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
     .reply(200, 'data');
-  const actual = data;
+  const actual = 'data';
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
   console.log(expected);
@@ -38,6 +38,9 @@ test('Download page', async () => {
 });
 
 test('Path not exist', async () => {
+  nock(/ru\.hexlet\.io/)
+    .get(/\/courses/)
+    .reply(200, 'data');
   const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
   expect(expected1).toThrow();
 });
