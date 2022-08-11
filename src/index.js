@@ -11,4 +11,3 @@ const downloadPage = (filePath, link) => {
 };
 
 export default downloadPage;
-

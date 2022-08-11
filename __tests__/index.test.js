@@ -15,7 +15,7 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 // const getPath = (dirname, filename) => path.join(dirname, filename);
 
 let data;
-const pampam = { data: 1 };
+const pampam = 'data';
 
 nock.disableNetConnect();
 
@@ -23,9 +23,9 @@ beforeAll(async () => {
   data = await fsp.readFile(getFixturePath('ru-hexlet-io-courses.html'));
 });
 
-// afterAll(() => {
-//   fsp.unlink(getFixturePath('ru-hexlet-io-courses.html'));
-// })
+afterAll(() => {
+  fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+});
 
 test('Download page', async () => {
   nock(/ru\.hexlet\.io/)
