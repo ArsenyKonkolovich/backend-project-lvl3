@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // import axios from 'axios';
 import os from 'os';
-// import nock from 'nock';
+import nock from 'nock';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fsp from 'fs/promises';
@@ -16,6 +16,8 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 
 let data;
 
+nock.disableNetConnect();
+
 beforeAll(async () => {
   data = await fsp.readFile(getFixturePath('ru-hexlet-io-courses.html'));
 });
@@ -25,16 +27,17 @@ beforeAll(async () => {
 // })
 
 test('Download page', async () => {
-//   nock(/ru\.hexlet\.io/)
-//     .get(/courses/)
-//     .reply(200, data);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/courses/)
+    .reply(200, 'data');
   const actual = data;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  console.log(expected);
   expect(expected).toEqual(actual);
 });
 
-test('Dont downloading page', async () => {
-  const expected1 = downloadPage('blablabla', 'https://ru.hexlet.io/courses');
+test('Path not exist', async () => {
+  const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
   expect(expected1).toThrow();
 });
