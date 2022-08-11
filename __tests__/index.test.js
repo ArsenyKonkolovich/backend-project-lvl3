@@ -15,6 +15,7 @@ const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name
 // const getPath = (dirname, filename) => path.join(dirname, filename);
 
 let data;
+const pampam = { data: 1 };
 
 nock.disableNetConnect();
 
@@ -29,8 +30,8 @@ beforeAll(async () => {
 test('Download page', async () => {
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
-    .reply(200, 'data');
-  const actual = 'data';
+    .reply(200, pampam);
+  const actual = pampam;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
   console.log(expected);
@@ -42,5 +43,6 @@ test('Path not exist', async () => {
     .get(/\/courses/)
     .reply(200, 'data');
   const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
+  console.log('EXPECTED 1', expected1);
   expect(expected1).toThrow();
 });
