@@ -15,7 +15,7 @@ const tmpFilePath = path.join(os.tmpdir());
 // const getPath = (dirname, filename) => path.join(dirname, filename);
 
 // let data;
-const pampam = 'data';
+const actualData = 'data';
 
 nock.disableNetConnect();
 
@@ -30,8 +30,8 @@ afterAll(() => {
 test('Download page', async () => {
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
-    .reply(200, pampam);
-  const actual = pampam;
+    .reply(200, actualData);
+  const actual = actualData;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
   console.log(expected);
@@ -42,7 +42,7 @@ test('Path not exist', async () => {
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
     .reply(200, 'data');
-  const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
-  console.log('EXPECTED 1', expected1);
-  expect(expected1).toThrow();
+  // const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
+  // console.log('EXPECTED 1', expected1);
+  expect(await downloadPage('blablabla', 'https://ru.hexlet.io/courses')).toThrow();
 });
