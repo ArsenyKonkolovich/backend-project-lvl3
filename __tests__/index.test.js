@@ -44,5 +44,5 @@ test('Path not exist', async () => {
     .reply(200, 'data');
   // const expected1 = await downloadPage('blablabla', 'https://ru.hexlet.io/courses');
   // console.log('EXPECTED 1', expected1);
-  expect(await downloadPage('blablabla', 'https://ru.hexlet.io/courses')).toThrow();
+  expect(async () => { await downloadPage('blablabla', 'https://ru.hexlet.io/courses'); }).toThrow();
 });
