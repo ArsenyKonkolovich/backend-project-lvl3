@@ -19,8 +19,9 @@ beforeAll(async () => {
   data = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses_files'), 'ru-hexlet-io-courses.html'), 'utf-8');
 });
 
-afterAll(() => {
-  fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+afterAll(async () => {
+  await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  await fsp.rmdir(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'));
 });
 
 test('Download page', async () => {

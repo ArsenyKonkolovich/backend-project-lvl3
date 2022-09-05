@@ -1,14 +1,11 @@
 import axios from 'axios';
-// import os from 'os';
+import os from 'os';
 import fsp from 'fs/promises';
 import path from 'path';
 
-const loadHtmlPage = (filePath, url) => {
-  console.log(`${filePath}.html`);
-  axios.get(url)
-    .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
-    .catch((e) => { throw new Error(e); });
-};
+const loadHtmlPage = (filePath, url) => axios.get(url)
+  .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
+  .catch((e) => { throw new Error(e); });
 
 // const extractImageLinks = (data) => {
 //   const regexp = /(?<=src=)".*?"/;
@@ -30,6 +27,6 @@ const downloadPage = (filePath, url) => {
     .catch((e) => { throw new Error(e); });
 };
 
-// downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
+downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
 
 export default downloadPage;
