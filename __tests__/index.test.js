@@ -10,7 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tmpFilePath = path.join(os.tmpdir());
 const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name);
-const getTmpFilePath = path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-courses.html');
 
 let data;
 
@@ -21,7 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  fsp.unlink(getTmpFilePath);
+  fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
 });
 
 test('Download page', async () => {
@@ -30,13 +29,6 @@ test('Download page', async () => {
     .reply(200, data);
   const actual = data;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
-  const expected = await fsp.readFile(getTmpFilePath, 'utf-8');
+  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'), 'utf-8');
   expect(expected).toEqual(actual);
 });
-
-// test('Path not exist', async () => {
-//   nock(/ru\.hexlet\.io/)
-//     .get(/\/courses/)
-//     .reply(200, 'data');
-//   expect(async () => { await downloadPage('blablabla', 'https://ru.hexlet.io/courses'); }).rejects.toThrow();
-// });
