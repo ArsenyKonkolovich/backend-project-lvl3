@@ -33,3 +33,12 @@ test('Download page', async () => {
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'), 'utf-8');
   expect(expected).toEqual(actual);
 });
+
+// test('Incorrect path', async () => {
+//   nock(/ru\.hexlet\.io/)
+//     .get(/\/courses/)
+//     .reply(200, data);
+//   // const actual = data;
+//   const expected = await downloadPage(path.join('.', '.'), 'https://ru.hexlet.io/courses');
+//   expect(expected).rejects.toThrow();
+// });
