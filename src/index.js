@@ -30,6 +30,6 @@ const downloadPage = (filePath, url) => {
     .catch((e) => { throw new Error(e); });
 };
 
-// downloadPage(path.join(os.tmpdir()), 'https://www.google.com');
+// downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
 
 export default downloadPage;
