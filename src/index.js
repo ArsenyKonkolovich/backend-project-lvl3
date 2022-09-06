@@ -41,7 +41,5 @@ const downloadPage = (filePath, url) => {
 
 // downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
 // downloadPage('blabla', 'https://www.google.com');
-// loadImage(path.join(`${cwd()}`, '../', 'backend-project-lvl3', '__fixtures__',
-//  'ru-hexlet-io-courses.html'), 15);
 
 export default downloadPage;
