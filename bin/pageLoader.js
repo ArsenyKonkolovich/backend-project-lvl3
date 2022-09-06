@@ -14,6 +14,5 @@ program
   .action((url) => {
     const options = program.opts();
     downloadPage(options.output, url);
-    console.log('Done!');
   });
 program.parse(process.argv);

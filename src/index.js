@@ -33,7 +33,9 @@ const downloadPage = (filePath, url) => {
     .catch((e) => { throw new Error(e); })
     .then(() => loadHtmlPage(resultPath, url))
     .catch((e) => { throw new Error(e); })
-    .then(() => loadImage(`${resultPath}`, url));
+    .then(() => loadImage(`${resultPath}`, url))
+    .catch((e) => { throw new Error(e); })
+    .then(() => console.log('Done!'));
 };
 
 // downloadPage('blabla', 'https://www.google.com');
