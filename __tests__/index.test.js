@@ -22,8 +22,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
-  // await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
+  await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
 });
 
 test('Download page', async () => {
