@@ -2,7 +2,6 @@ import axios from 'axios';
 import fsp from 'fs/promises';
 import path from 'path';
 import * as cheerio from 'cheerio';
-// import { cwd } from 'node:process';
 
 const loadHtmlPage = (filePath, url) => axios.get(url)
   .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
@@ -19,8 +18,6 @@ const loadImage = (filePath, url) => {
     })
     .catch((e) => { throw new Error(e); })
     .then(() => {
-      console.log(`${url}${imageLinks[0]}`);
-      console.log(path.parse(imageLinks[0]).base);
       imageLinks.forEach((link) => {
         const imageName = path.parse(link).base;
         axios.get(`${url}${link}`)
@@ -39,7 +36,6 @@ const downloadPage = (filePath, url) => {
     .then(() => loadImage(`${resultPath}`, url));
 };
 
-// downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
 // downloadPage('blabla', 'https://www.google.com');
 
 export default downloadPage;
