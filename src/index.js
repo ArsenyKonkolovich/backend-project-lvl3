@@ -1,22 +1,33 @@
 import axios from 'axios';
-// import os from 'os';
 import fsp from 'fs/promises';
 import path from 'path';
+import * as cheerio from 'cheerio';
+// import { cwd } from 'node:process';
 
 const loadHtmlPage = (filePath, url) => axios.get(url)
   .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
   .catch((e) => { throw new Error(e); });
 
-// const extractImageLinks = (data) => {
-//   const regexp = /(?<=src=)".*?"/;
-
-// }
-
-// const loadImage = (filePath, url) => {
-//   const dirPath = `${filePath}_files`;
-//   return fsp.readFile(filePath)
-//   .then((data) => )
-// };
+const loadImage = (filePath, url) => {
+  const dirPath = `${filePath}_files`;
+  const htmlFilePath = `${filePath}.html`;
+  const imageLinks = [];
+  return fsp.readFile(htmlFilePath)
+    .then((data) => {
+      const $ = cheerio.load(data);
+      imageLinks.push($('img').attr('src'));
+    })
+    .catch((e) => { throw new Error(e); })
+    .then(() => {
+      console.log(`${url}${imageLinks[0]}`);
+      console.log(path.parse(imageLinks[0]).base);
+      imageLinks.forEach((link) => {
+        const imageName = path.parse(link).base;
+        axios.get(`${url}${link}`)
+          .then(({ data }) => fsp.writeFile(path.join(dirPath, imageName), data));
+      });
+    });
+};
 
 const downloadPage = (filePath, url) => {
   const fileName = url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
@@ -24,9 +35,13 @@ const downloadPage = (filePath, url) => {
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .catch((e) => { throw new Error(e); })
     .then(() => loadHtmlPage(resultPath, url))
-    .catch((e) => { throw new Error(e); });
+    .catch((e) => { throw new Error(e); })
+    .then(() => loadImage(`${resultPath}`, url));
 };
 
 // downloadPage(path.join(os.tmpdir()), 'https://ru.hexlet.io/courses');
+// downloadPage('blabla', 'https://www.google.com');
+// loadImage(path.join(`${cwd()}`, '../', 'backend-project-lvl3', '__fixtures__',
+//  'ru-hexlet-io-courses.html'), 15);
 
 export default downloadPage;
