@@ -12,33 +12,40 @@ const tmpFilePath = path.join(os.tmpdir());
 const getFixturePath = (name) => path.join(__dirname, '..', '__fixtures__', name);
 
 let data;
+let imagedata;
 
 nock.disableNetConnect();
 
 beforeAll(async () => {
   data = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses_files'), 'ru-hexlet-io-courses.html'), 'utf-8');
+  imagedata = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses_files'), 'ru-hexlet-io-assets-professions-nodejs.png'), 'utf-8');
 });
 
 afterAll(async () => {
-  await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
-  await fsp.rmdir(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'));
+  // await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  // await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
 });
 
 test('Download page', async () => {
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
-    .reply(200, data);
+    .reply(200, data)
+    .get(/\/courses\/assets\/professions\/nodejs\.png/)
+    .reply(200, imagedata);
   const actual = data;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'), 'utf-8');
   expect(expected).toEqual(actual);
 });
 
-// test('Incorrect path', async () => {
-//   nock(/ru\.hexlet\.io/)
-//     .get(/\/courses/)
-//     .reply(200, data);
-//   // const actual = data;
-//   const expected = await downloadPage(path.join('.', '.'), 'https://ru.hexlet.io/courses');
-//   expect(expected).rejects.toThrow();
-// });
+test('Download image', async () => {
+  nock(/ru\.hexlet\.io/)
+    .get(/\/courses/)
+    .reply(200, data)
+    .get(/\/courses\/assets\/professions\/nodejs\.png/)
+    .reply(200, imagedata);
+  const actual = imagedata;
+  await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
+  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'nodejs.png'), 'utf-8');
+  expect(expected).toEqual(actual);
+});
