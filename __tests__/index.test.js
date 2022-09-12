@@ -17,13 +17,13 @@ let imagedata;
 nock.disableNetConnect();
 
 beforeAll(async () => {
-  data = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses_files'), 'ru-hexlet-io-courses.html'), 'utf-8');
+  data = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses.html')), 'utf-8');
   imagedata = await fsp.readFile(path.join(getFixturePath('ru-hexlet-io-courses_files'), 'ru-hexlet-io-assets-professions-nodejs.png'), 'utf-8');
 });
 
 afterAll(async () => {
-  await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
-  await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
+  // await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  // await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
 });
 
 test('Download page', async () => {
