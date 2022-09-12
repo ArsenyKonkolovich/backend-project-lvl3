@@ -7,21 +7,25 @@ const loadHtmlPage = (filePath, url) => axios.get(url)
   .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
   .catch((e) => { throw new Error(e); });
 
-const loadImage = (filePath, url) => {
+const loadImage = (filePath, url, fileName) => {
+  const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
-  const imageLinks = [];
+  let imageLinks = [];
   return fsp.readFile(htmlFilePath)
     .then((data) => {
       const $ = cheerio.load(data);
-      imageLinks.push($('img').attr('src'));
+      imageLinks = $('img').toArray();
     })
     .catch((e) => { throw new Error(e); })
     .then(() => {
       imageLinks.forEach((link) => {
+        console.log(link);
         const imageName = path.parse(link).base;
         axios.get(`${url}${link}`)
-          .then(({ data }) => fsp.writeFile(path.join(dirPath, imageName), data));
+          .then(({ data }) => fsp.writeFile(path.join(dirPath, imageName), data))
+          .catch((e) => { throw new Error(e); });
+        link.attr('src', `${dirName}/${imageName}`);
       });
     });
 };
@@ -33,11 +37,13 @@ const downloadPage = (filePath, url) => {
     .catch((e) => { throw new Error(e); })
     .then(() => loadHtmlPage(resultPath, url))
     .catch((e) => { throw new Error(e); })
-    .then(() => loadImage(`${resultPath}`, url))
+    .then(() => loadImage(`${resultPath}`, url, fileName))
     .catch((e) => { throw new Error(e); })
     .then(() => console.log('Done!'));
 };
 
-// downloadPage('blabla', 'https://www.google.com');
+downloadPage('blabla', 'https://www.google.com');
+// const $elements = $(tagName).toArray();
+// $elements.forEach(($element) => $element.attr(attrName, value));
 
 export default downloadPage;
