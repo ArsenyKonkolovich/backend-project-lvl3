@@ -3,9 +3,13 @@ import fsp from 'fs/promises';
 import path from 'path';
 import * as cheerio from 'cheerio';
 
-// const loadHtmlPage = (filePath, url) => axios.get(url)
-//   .then(({ data }) => fsp.writeFile(`${filePath}.html`, data))
-//   .catch((e) => { throw new Error(e); });
+const nameChanger = (url) => url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
+
+const normalizeName = (url, resourseUrl) => {
+  const nameForChange = `${path.parse(resourseUrl).dir}/${path.parse(resourseUrl).name}`;
+  const nameWhithOutExt = nameChanger(`${url}${nameForChange}`);
+  return `${nameWhithOutExt}${path.parse(resourseUrl).ext}`;
+};
 
 const loadHtmlPage = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
@@ -18,9 +22,9 @@ const loadHtmlPage = (filePath, url, fileName) => {
       $ = cheerio.load(data);
       imageLinks = $('img').toArray();
       imageLinks.forEach((link) => {
-        console.log($(link).attr('src'));
         const imageLink = $(link).attr('src');
-        const imageName = path.parse(imageLink).base;
+        // console.log(normalizeName(url, imageLink));
+        const imageName = normalizeName(url, imageLink);
         axios.get(`${url}${imageLink}`)
           // eslint-disable-next-line no-shadow
           .then(({ data }) => fsp.writeFile(path.join(dirPath, imageName), data))
@@ -33,12 +37,10 @@ const loadHtmlPage = (filePath, url, fileName) => {
 };
 
 const downloadPage = (filePath, url) => {
-  const fileName = url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
+  const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .catch((e) => { throw new Error(e); })
-    // .then(() => loadHtmlPage(resultPath, url))
-    // .catch((e) => { throw new Error(e); })
     .then(() => loadHtmlPage(`${resultPath}`, url, fileName))
     .catch((e) => { throw new Error(e); })
     .then(() => console.log('Done!'));
