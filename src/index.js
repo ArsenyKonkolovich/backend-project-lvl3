@@ -3,37 +3,63 @@ import fsp from 'fs/promises';
 import path from 'path';
 import * as cheerio from 'cheerio';
 
+const mapping = {
+  img: 'src',
+  script: 'src',
+  link: 'href',
+};
+
 const nameChanger = (url) => url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
 
-const normalizeName = (url, resourseUrl) => {
-  const nameForChange = `${path.parse(resourseUrl).dir}/${path.parse(resourseUrl).name}`;
-  const nameWhithOutExt = nameChanger(`${url}${nameForChange}`);
-  return `${nameWhithOutExt}${path.parse(resourseUrl).ext}`;
+const normalizeName = (url) => {
+  console.log(url);
+  const nameForChange = `${path.parse(url.href).dir}/${path.parse(url.href).name}`;
+  const nameWhithOutExt = nameChanger(nameForChange);
+  const resultName = `${nameWhithOutExt}${path.parse(url.href).ext}`;
+  // console.log('nameForChange', nameForChange);
+  // console.log('nameWhithOutExt', nameWhithOutExt);
+  // console.log('resultName', resultName);
+  return resultName;
+};
+
+const isDownloadable = (src, link) => {
+  const srcUrl = new URL(src, link);
+  const pageUrl = new URL(link);
+  return srcUrl.origin === pageUrl.origin;
 };
 
 const loadHtmlPage = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
-  let imageLinks = [];
+  let srcinks = [];
   let $;
+  const tagNames = Object.keys(mapping);
   return axios.get(url)
     .then(({ data }) => {
       $ = cheerio.load(data);
-      imageLinks = $('img').toArray();
-      imageLinks.forEach((link) => {
-        const imageLink = $(link).attr('src');
-        // console.log(normalizeName(url, imageLink));
-        const imageName = normalizeName(url, imageLink);
-        axios.get(`${url}${imageLink}`)
-          // eslint-disable-next-line no-shadow
-          .then(({ data }) => fsp.writeFile(path.join(dirPath, imageName), data))
-          .catch((e) => { throw new Error(e); });
-        $(link).attr('src', `${dirName}/${imageName}`);
+      tagNames.forEach((tagName) => {
+        const attrName = mapping[tagName];
+        srcinks = $(tagName).toArray();
+        srcinks.forEach((link) => {
+          if (isDownloadable(link, url)) {
+            const srcLink = $(link).attr(attrName);
+            console.log(srcLink.href);
+            const downloadLink = new URL(srcLink, url);
+            const srcName = normalizeName(downloadLink);
+            axios.get(`${url}${srcLink}`)
+            // eslint-disable-next-line no-shadow
+              .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data))
+              .catch((e) => { throw new Error(e); });
+            $(link).attr(attrName, `${dirName}/${srcName}`);
+          }
+        });
       });
     })
     .catch((e) => { throw new Error(e); })
-    .then(() => fsp.writeFile(htmlFilePath, $.html()));
+    .then(() => {
+      fsp.writeFile(htmlFilePath, $.html());
+    });
 };
 
 const downloadPage = (filePath, url) => {
@@ -47,7 +73,6 @@ const downloadPage = (filePath, url) => {
 };
 
 // downloadPage('blabla', 'https://www.google.com');
-// const $elements = $(tagName).toArray();
-// $elements.forEach(($element) => $element.attr(attrName, value));
+// downloadPage('blabla', 'https://www.elbrusboot.camp');
 
 export default downloadPage;
