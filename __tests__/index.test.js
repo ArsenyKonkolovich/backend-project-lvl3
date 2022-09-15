@@ -48,6 +48,6 @@ test('Download image', async () => {
     .reply(200, imagedata);
   const actual = imagedata;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
-  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-courses-assets-professions-nodejs.png'), 'utf-8');
+  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-assets-professions-nodejs.png'), 'utf-8');
   expect(expected).toEqual(actual);
 });
