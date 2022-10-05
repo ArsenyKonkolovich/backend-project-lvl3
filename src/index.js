@@ -44,6 +44,7 @@ const loadHtmlPage = (filePath, url, fileName) => {
           if (isDownloadable($(link).attr(attrName), url)) {
             const srcLink = $(link).attr(attrName);
             const downloadLink = new URL(srcLink, url);
+            console.log(url, srcLink);
             console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
             axios.get(downloadLink.href)
