@@ -12,7 +12,7 @@ const mapping = {
 const nameChanger = (url) => url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
 
 const normalizeName = (url) => {
-  console.log(url);
+  // console.log(url);
   const nameForChange = `${path.parse(url.href).dir}/${path.parse(url.href).name}`;
   const nameWhithOutExt = nameChanger(nameForChange);
   const resultName = `${nameWhithOutExt}${path.parse(url.href).ext}`;
@@ -22,9 +22,12 @@ const normalizeName = (url) => {
   return resultName;
 };
 
-const isDownloadable = (src, link) => {
-  const srcUrl = new URL(src, link);
-  const pageUrl = new URL(link);
+const isDownloadable = (src, url) => {
+  const srcUrl = new URL(src, url);
+  const pageUrl = new URL(url);
+  console.log('Src and url', src, url);
+  console.log('Typeof Src and url',typeof src, typeof url);
+  console.log('origin srcurl and pageurl', srcUrl.origin, pageUrl.origin);
   return srcUrl.origin === pageUrl.origin;
 };
 
@@ -42,9 +45,10 @@ const loadHtmlPage = (filePath, url, fileName) => {
         const attrName = mapping[tagName];
         srcinks = $(tagName).toArray();
         srcinks.forEach((link) => {
-          if (isDownloadable(link, url)) {
+          console.log('Link to html', $(link).html());
+          if (isDownloadable($(link).text(), url)) {
             const srcLink = $(link).attr(attrName);
-            console.log(srcLink.href);
+            // console.log(srcLink);
             const downloadLink = new URL(srcLink, url);
             const srcName = normalizeName(downloadLink);
             axios.get(`${url}${srcLink}`)
@@ -73,6 +77,6 @@ const downloadPage = (filePath, url) => {
 };
 
 // downloadPage('blabla', 'https://www.google.com');
-// downloadPage('blabla', 'https://www.elbrusboot.camp');
+// downloadPage('blabla', 'https://www.ya.ru');
 
 export default downloadPage;
