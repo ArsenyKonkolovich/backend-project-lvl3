@@ -12,22 +12,18 @@ const mapping = {
 const nameChanger = (url) => url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
 
 const normalizeName = (url) => {
-  // console.log(url);
   const nameForChange = `${path.parse(url.href).dir}/${path.parse(url.href).name}`;
   const nameWhithOutExt = nameChanger(nameForChange);
   const resultName = `${nameWhithOutExt}${path.parse(url.href).ext}`;
-  // console.log('nameForChange', nameForChange);
-  // console.log('nameWhithOutExt', nameWhithOutExt);
-  // console.log('resultName', resultName);
   return resultName;
 };
 
 const isDownloadable = (src, url) => {
   const srcUrl = new URL(src, url);
   const pageUrl = new URL(url);
-  console.log('Src and url', src, url);
-  console.log('Typeof Src and url',typeof src, typeof url);
-  console.log('origin srcurl and pageurl', srcUrl.origin, pageUrl.origin);
+  // console.log('Src and url', src, url);
+  // console.log('Typeof Src and url',typeof src, typeof url);
+  // console.log('origin srcurl and pageurl', srcUrl.origin, pageUrl.origin);
   return srcUrl.origin === pageUrl.origin;
 };
 
@@ -45,13 +41,12 @@ const loadHtmlPage = (filePath, url, fileName) => {
         const attrName = mapping[tagName];
         srcinks = $(tagName).toArray();
         srcinks.forEach((link) => {
-          console.log('Link to html', $(link).html());
-          if (isDownloadable($(link).text(), url)) {
+          if (isDownloadable($(link).attr(attrName), url)) {
             const srcLink = $(link).attr(attrName);
-            // console.log(srcLink);
             const downloadLink = new URL(srcLink, url);
+            console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
-            axios.get(`${url}${srcLink}`)
+            axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
               .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data))
               .catch((e) => { throw new Error(e); });
