@@ -45,27 +45,25 @@ const loadHtmlPage = (filePath, url, fileName) => {
             const srcName = normalizeName(downloadLink);
             axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
-              .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data))
-              .catch((e) => { throw new Error(e); });
+              .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
             $(link).attr(attrName, `${dirName}/${srcName}`);
           }
         });
       });
     })
-    .catch((e) => { throw new Error(e); })
     .then(() => {
       fsp.writeFile(htmlFilePath, $.html());
-    });
+    })
+    .catch((e) => { throw new Error(e); });
 };
 
 const downloadPage = (filePath, url) => {
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
-    .catch((e) => { throw new Error(e); })
     .then(() => loadHtmlPage(`${resultPath}`, url, fileName))
-    .catch((e) => { throw new Error(e); })
-    .then(() => console.log('Done!'));
+    .then(() => console.log('Done!'))
+    .catch((e) => { throw new Error(e); });
 };
 
 // downloadPage('blabla', 'https://www.google.com');
