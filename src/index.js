@@ -21,10 +21,16 @@ const normalizeName = (url) => {
 const isDownloadable = (src, url) => {
   const srcUrl = new URL(src, url);
   const pageUrl = new URL(url);
-  // console.log('Src and url', src, url);
-  // console.log('Typeof Src and url',typeof src, typeof url);
-  // console.log('origin srcurl and pageurl', srcUrl.origin, pageUrl.origin);
   return srcUrl.origin === pageUrl.origin;
+};
+
+const normalizeLink = (srcLink, url) => {
+  console.log(typeof srcLink);
+  const hostName = new URL(url).hostname;
+  if (srcLink.includes(hostName)) {
+    return new URL(srcLink, url);
+  }
+  return new URL(`${url}${srcLink}`);
 };
 
 const loadHtmlPage = (filePath, url, fileName) => {
@@ -43,7 +49,7 @@ const loadHtmlPage = (filePath, url, fileName) => {
         srcinks.forEach((link) => {
           if (isDownloadable($(link).attr(attrName), url)) {
             const srcLink = $(link).attr(attrName);
-            const downloadLink = new URL(srcLink, url);
+            const downloadLink = normalizeLink(srcLink, url);
             console.log(url, srcLink);
             console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
