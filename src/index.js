@@ -37,7 +37,7 @@ const loadHtmlPage = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
-  let srcinks = [];
+  let srcLinks = [];
   let $;
   const tagNames = Object.keys(mapping);
   return axios.get(url)
@@ -45,10 +45,11 @@ const loadHtmlPage = (filePath, url, fileName) => {
       $ = cheerio.load(data);
       tagNames.forEach((tagName) => {
         const attrName = mapping[tagName];
-        srcinks = $(tagName).toArray();
-        srcinks.forEach((link) => {
-          if (isDownloadable($(link).attr(attrName), url)) {
-            const srcLink = $(link).attr(attrName);
+        srcLinks = $(tagName).toArray();
+        srcLinks.forEach((link) => {
+          const srcLink = $(link).attr(attrName);
+          if (srcLink && isDownloadable(srcLink, url)) {
+            console.log(srcLinks);
             const downloadLink = normalizeLink(srcLink, url);
             console.log(url, srcLink);
             console.log(downloadLink.href);
@@ -80,5 +81,6 @@ const downloadPage = (filePath, url) => {
 
 // downloadPage('blabla', 'https://www.google.com');
 // downloadPage('blabla', 'https://www.ya.ru');
+// downloadPage('blabla', 'https://ru.hexlet.io/courses');
 
 export default downloadPage;
