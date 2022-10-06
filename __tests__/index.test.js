@@ -28,8 +28,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
-  await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
+  // await fsp.unlink(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'));
+  // await fsp.rm(path.join(tmpFilePath, 'ru-hexlet-io-courses_files'), { recursive: true, force: true });
 });
 
 test('Download page', async () => {
@@ -41,7 +41,9 @@ test('Download page', async () => {
     .get(/\/assets\/application\.css/)
     .reply(200, cssData)
     .get(/\/packs\/js\/runtime\.js/)
-    .reply(200, jsData);
+    .reply(200, jsData)
+    .get(/\/courses\/courses/)
+    .reply(200, data);
   const actual = changeData;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'), 'utf-8');
@@ -57,10 +59,12 @@ test('Download image', async () => {
     .get(/\/assets\/application\.css/)
     .reply(200, cssData)
     .get(/\/packs\/js\/runtime\.js/)
-    .reply(200, jsData);
+    .reply(200, jsData)
+    .get(/\/courses\/courses/)
+    .reply(200, data);
   const actual = imagedata;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
-  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-assets-professions-nodejs.png'), 'utf-8');
+  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-courses-assets-professions-nodejs.png'), 'utf-8');
   expect(expected).toEqual(actual);
 });
 
@@ -73,10 +77,12 @@ test('Download css', async () => {
     .get(/\/assets\/application\.css/)
     .reply(200, cssData)
     .get(/\/packs\/js\/runtime\.js/)
-    .reply(200, jsData);
+    .reply(200, jsData)
+    .get(/\/courses\/courses/)
+    .reply(200, data);
   const actual = cssData;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
-  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-assets-application.css'), 'utf-8');
+  const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-courses-assets-application.css'), 'utf-8');
   expect(expected).toEqual(actual);
 });
 
@@ -89,7 +95,9 @@ test('Download script', async () => {
     .get(/\/assets\/application\.css/)
     .reply(200, cssData)
     .get(/\/packs\/js\/runtime\.js/)
-    .reply(200, jsData);
+    .reply(200, jsData)
+    .get(/\/courses\/courses/)
+    .reply(200, data);
   const actual = jsData;
   await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
   const expected = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-packs-js-runtime.js'), 'utf-8');
