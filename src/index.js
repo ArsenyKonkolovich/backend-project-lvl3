@@ -24,14 +24,6 @@ const isDownloadable = (src, url) => {
   return srcUrl.origin === pageUrl.origin;
 };
 
-const normalizeLink = (srcLink, url) => {
-  const hostName = new URL(url).hostname;
-  if (srcLink.includes(hostName)) {
-    return new URL(srcLink, url);
-  }
-  return new URL(`${url}${srcLink}`);
-};
-
 const loadHtmlPage = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
@@ -48,8 +40,8 @@ const loadHtmlPage = (filePath, url, fileName) => {
         srcLinks.forEach((link) => {
           const srcLink = $(link).attr(attrName);
           if (srcLink && isDownloadable(srcLink, url)) {
-            // console.log(srcLinks);
-            const downloadLink = normalizeLink(srcLink, url);
+            const downloadLink = new URL(srcLink, url);
+            console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
             axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
