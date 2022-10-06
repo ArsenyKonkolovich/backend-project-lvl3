@@ -13,4 +13,4 @@
 $make install
 ```
 ### Работа утилиты
-[![asciicast](https://asciinema.org/a/3fOx55VVyyMeJXmYctKeuc2za.svg)](https://asciinema.org/a/3fOx55VVyyMeJXmYctKeuc2za)
+[![asciicast](https://asciinema.org/a/ioZxspAYCFfYedxYsODdiDM0W.svg)](https://asciinema.org/a/ioZxspAYCFfYedxYsODdiDM0W)
