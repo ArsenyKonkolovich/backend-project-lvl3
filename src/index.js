@@ -2,6 +2,23 @@ import axios from 'axios';
 import fsp from 'fs/promises';
 import path from 'path';
 import * as cheerio from 'cheerio';
+import axiosDebug from 'axios-debug-log';
+import debug from 'debug';
+import { nameChanger, normalizeName, isDownloadable } from './util.js';
+
+const log = debug('page-loader');
+
+axiosDebug({
+  request(httpDebug, config) {
+    httpDebug(`Request ${config.url}`);
+  },
+  response(httpDebug, response) {
+    httpDebug(
+      `Response with ${response.headers['content-type']}`,
+      `from ${response.config.url}`,
+    );
+  },
+});
 
 const mapping = {
   img: 'src',
@@ -9,22 +26,7 @@ const mapping = {
   link: 'href',
 };
 
-const nameChanger = (url) => url.replace(/htt(p|ps):\/\//, '').replace(/\W/g, '-');
-
-const normalizeName = (url) => {
-  const nameForChange = `${path.parse(url.href).dir}/${path.parse(url.href).name}`;
-  const nameWhithOutExt = nameChanger(nameForChange);
-  const resultName = `${nameWhithOutExt}${path.parse(url.href).ext}`;
-  return resultName;
-};
-
-const isDownloadable = (src, url) => {
-  const srcUrl = new URL(src, url);
-  const pageUrl = new URL(url);
-  return srcUrl.origin === pageUrl.origin;
-};
-
-const loadHtmlPage = (filePath, url, fileName) => {
+const loadResourses = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
@@ -41,11 +43,12 @@ const loadHtmlPage = (filePath, url, fileName) => {
           const srcLink = $(link).attr(attrName);
           if (srcLink && isDownloadable(srcLink, url)) {
             const downloadLink = new URL(srcLink, url);
-            console.log(downloadLink.href);
+            // console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
             axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
               .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+            log('info', `Download resourse from ${downloadLink.href}`);
             $(link).attr(attrName, `${dirName}/${srcName}`);
           }
         });
@@ -61,7 +64,7 @@ const downloadPage = (filePath, url) => {
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
-    .then(() => loadHtmlPage(`${resultPath}`, url, fileName))
+    .then(() => loadResourses(`${resultPath}`, url, fileName))
     .then(() => console.log('Done!'))
     .catch((e) => { throw new Error(e); });
 };
