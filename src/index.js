@@ -43,12 +43,12 @@ const loadResourses = (filePath, url, fileName) => {
           const srcLink = $(link).attr(attrName);
           if (srcLink && isDownloadable(srcLink, url)) {
             const downloadLink = new URL(srcLink, url);
-            // console.log(downloadLink.href);
             const srcName = normalizeName(downloadLink);
+            log(`Filename is ${srcName}`);
             axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
               .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
-            log('info', `Download resourse from ${downloadLink.href}`);
+            log(`Download resourse from ${downloadLink.href}`);
             $(link).attr(attrName, `${dirName}/${srcName}`);
           }
         });
@@ -56,6 +56,7 @@ const loadResourses = (filePath, url, fileName) => {
     })
     .then(() => {
       fsp.writeFile(htmlFilePath, $.html());
+      log(`HTML filepath is ${htmlFilePath}`);
     })
     .catch((e) => { throw new Error(e); });
 };
