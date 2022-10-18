@@ -14,3 +14,6 @@ $make install
 ```
 ### Работа утилиты
 [![asciicast](https://asciinema.org/a/ioZxspAYCFfYedxYsODdiDM0W.svg)](https://asciinema.org/a/ioZxspAYCFfYedxYsODdiDM0W)
+
+### Debug mode
+[![asciicast](https://asciinema.org/a/0PPCfBoRFPu2yVJHFBQKmVrKr.svg)](https://asciinema.org/a/0PPCfBoRFPu2yVJHFBQKmVrKr)
