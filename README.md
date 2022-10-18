@@ -7,15 +7,33 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/7f134787a427157ce8c8/maintainability)](https://codeclimate.com/github/ArsenyKonkolovich/backend-project-lvl3/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7f134787a427157ce8c8/test_coverage)](https://codeclimate.com/github/ArsenyKonkolovich/backend-project-lvl3/test_coverage)
 
-### Page-loader 
-Утилита для скачивания html страниц. 
+### About Page Loader
+Page Loader is an utility for downloading a page and its resources. This project was created as part of the [Hexlet](https://ru.hexlet.io/) course.
 
-### Установка
-Для установки утилиты необходимо ввести склонировать репозиторий и выполнить команду установки пакетов.
-```bash
-$make install
+
+## Getting started
+- Clone the repository
+```cmd
+git clone git@github.com:elizablok/backend-project-lvl3.git
 ```
-### Работа утилиты
+- Install dependencies
+```cmd
+make install
+```
+
+### Usage
+```cmd
+Usage: page-loader [options] <url>
+
+Page loader utility
+
+Options:
+  -V, --version       output the version number
+  -o, --output [dir]  output dir (default: "/home/user/current-dir")
+  -h, --help          display help for command
+```
+
+### Downloading
 [![asciicast](https://asciinema.org/a/s8buV7pek4rEsBzpi7dTsdlM0.svg)](https://asciinema.org/a/s8buV7pek4rEsBzpi7dTsdlM0)
 
 ### Debug mode
