@@ -38,3 +38,6 @@ Options:
 
 ### Debug mode
 [![asciicast](https://asciinema.org/a/XjO8c6K5J5upIp9vb4Mt0vMOs.svg)](https://asciinema.org/a/XjO8c6K5J5upIp9vb4Mt0vMOs)
+
+### Downloading with errors
+[![asciicast](https://asciinema.org/a/ESaCVYjAgRnjRwYo0Ee56w3gI.svg)](https://asciinema.org/a/ESaCVYjAgRnjRwYo0Ee56w3gI)
