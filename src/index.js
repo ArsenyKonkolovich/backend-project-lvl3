@@ -73,5 +73,6 @@ const downloadPage = (filePath, url) => {
 };
 
 // downloadPage('blabla', 'https://www.google.com');
+// downloadPage('blabla', 'https://ru.hexlet.io/courses');
 
 export default downloadPage;
