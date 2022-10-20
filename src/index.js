@@ -55,8 +55,8 @@ const loadResourses = (filePath, url, fileName) => {
       });
     })
     .then(() => {
-      fsp.writeFile(htmlFilePath, $.html());
       log(`HTML filepath is ${htmlFilePath}`);
+      return fsp.writeFile(htmlFilePath, $.html());
     });
 };
 
