@@ -57,8 +57,11 @@ const loadResourses = (filePath, url, fileName) => {
     .then(() => {
       fsp.writeFile(htmlFilePath, $.html());
       log(`HTML filepath is ${htmlFilePath}`);
-    })
-    .catch((e) => { throw new Error(e); });
+    });
+  // .catch((error) => {
+  //   console.error(`Sorry, download error: ${error.message} ${error.code}`);
+  //   throw error;
+  // });
 };
 
 const downloadPage = (filePath, url) => {
@@ -67,11 +70,13 @@ const downloadPage = (filePath, url) => {
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .then(() => loadResourses(`${resultPath}`, url, fileName))
     .then(() => console.log('Done!'))
-    .catch((e) => { throw new Error(e); });
+    .catch((error) => {
+      console.error(`Sorry, download error: ${error.message} ${error.code}`);
+      throw error;
+    });
 };
 
 // downloadPage('blabla', 'https://www.google.com');
-// downloadPage('blabla', 'https://www.ya.ru');
 // downloadPage('blabla', 'https://ru.hexlet.io/courses');
 
 export default downloadPage;
