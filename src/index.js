@@ -58,10 +58,6 @@ const loadResourses = (filePath, url, fileName) => {
       fsp.writeFile(htmlFilePath, $.html());
       log(`HTML filepath is ${htmlFilePath}`);
     });
-  // .catch((error) => {
-  //   console.error(`Sorry, download error: ${error.message} ${error.code}`);
-  //   throw error;
-  // });
 };
 
 const downloadPage = (filePath, url) => {
