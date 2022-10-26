@@ -43,11 +43,11 @@ const loadResourses = (filePath, url, fileName) => {
         const attrName = mapping[tagName];
         srcLinks = $(tagName).toArray();
         const tasks = new Listr(srcLinks
-          .forEach((link) => {
+          .map((link) => {
             const srcLink = $(link).attr(attrName);
             if (srcLink && isDownloadable(srcLink, url)) {
               const downloadLink = new URL(srcLink, url);
-              linkForTasks = downloadLink;
+              linkForTasks = downloadLink.href;
               const srcName = normalizeName(downloadLink);
               log(`Filename is ${srcName}`);
               axios.get(downloadLink.href)
