@@ -4,9 +4,16 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 import axiosDebug from 'axios-debug-log';
 import debug from 'debug';
+import Listr from 'listr';
 import { nameChanger, normalizeName, isDownloadable } from './util.js';
 
 const log = debug('page-loader');
+
+const mapping = {
+  img: 'src',
+  script: 'src',
+  link: 'href',
+};
 
 axiosDebug({
   request(httpDebug, config) {
@@ -19,12 +26,6 @@ axiosDebug({
     );
   },
 });
-
-const mapping = {
-  img: 'src',
-  script: 'src',
-  link: 'href',
-};
 
 const loadResourses = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
@@ -45,17 +46,22 @@ const loadResourses = (filePath, url, fileName) => {
             const downloadLink = new URL(srcLink, url);
             const srcName = normalizeName(downloadLink);
             log(`Filename is ${srcName}`);
-            axios.get(downloadLink.href)
+            const task = new Listr(axios.get(downloadLink.href)
             // eslint-disable-next-line no-shadow
-              .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+              .then(({ data }) => {
+                fsp.writeFile(path.join(dirPath, srcName), data);
+                return { title: downloadLink, task: () => task };
+              }));
             log(`Download resourse from ${downloadLink.href}`);
             $(link).attr(attrName, `${dirName}/${srcName}`);
+            return task.run();
           }
         });
       });
     })
     .then(() => {
       log(`HTML filepath is ${htmlFilePath}`);
+      console.log(`Page was succsessfully download into ${htmlFilePath}`);
       return fsp.writeFile(htmlFilePath, $.html());
     });
 };
@@ -65,7 +71,6 @@ const downloadPage = (filePath, url) => {
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .then(() => loadResourses(`${resultPath}`, url, fileName))
-    .then(() => console.log('Done!'))
     .catch((error) => {
       console.error(`Sorry, download error: ${error.message} ${error.code}`);
       throw error;
