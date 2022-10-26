@@ -33,6 +33,7 @@ const loadResourses = (filePath, url, fileName) => {
   const htmlFilePath = `${filePath}.html`;
   let srcLinks = [];
   let $;
+  let linkForTasks;
   const tagNames = Object.keys(mapping);
   return axios.get(url)
     .then(({ data }) => {
@@ -45,6 +46,7 @@ const loadResourses = (filePath, url, fileName) => {
             const srcLink = $(link).attr(attrName);
             if (srcLink && isDownloadable(srcLink, url)) {
               const downloadLink = new URL(srcLink, url);
+              linkForTasks = downloadLink;
               const srcName = normalizeName(downloadLink);
               log(`Filename is ${srcName}`);
               axios.get(downloadLink.href)
@@ -52,10 +54,10 @@ const loadResourses = (filePath, url, fileName) => {
                 .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
               log(`Download resourse from ${downloadLink.href}`);
               $(link).attr(attrName, `${dirName}/${srcName}`);
-              return { title: downloadLink, task: () => tasks };
             }
-            return tasks.run();
+            return { title: linkForTasks, task: () => tasks };
           }));
+        return tasks.run();
       });
     })
     .then(() => {
