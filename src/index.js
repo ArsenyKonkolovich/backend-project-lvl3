@@ -40,23 +40,22 @@ const loadResourses = (filePath, url, fileName) => {
       tagNames.forEach((tagName) => {
         const attrName = mapping[tagName];
         srcLinks = $(tagName).toArray();
-        srcLinks.forEach((link) => {
-          const srcLink = $(link).attr(attrName);
-          if (srcLink && isDownloadable(srcLink, url)) {
-            const downloadLink = new URL(srcLink, url);
-            const srcName = normalizeName(downloadLink);
-            log(`Filename is ${srcName}`);
-            const task = new Listr(axios.get(downloadLink.href)
-            // eslint-disable-next-line no-shadow
-              .then(({ data }) => {
-                fsp.writeFile(path.join(dirPath, srcName), data);
-                return { title: downloadLink, task: () => task };
-              }));
-            log(`Download resourse from ${downloadLink.href}`);
-            $(link).attr(attrName, `${dirName}/${srcName}`);
-            return task.run();
-          }
-        });
+        const tasks = new Listr(srcLinks
+          .forEach((link) => {
+            const srcLink = $(link).attr(attrName);
+            if (srcLink && isDownloadable(srcLink, url)) {
+              const downloadLink = new URL(srcLink, url);
+              const srcName = normalizeName(downloadLink);
+              log(`Filename is ${srcName}`);
+              axios.get(downloadLink.href)
+              // eslint-disable-next-line no-shadow
+                .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+              log(`Download resourse from ${downloadLink.href}`);
+              $(link).attr(attrName, `${dirName}/${srcName}`);
+              return { title: downloadLink, task: () => tasks };
+            }
+            return tasks.run();
+          }));
       });
     })
     .then(() => {
