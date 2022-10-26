@@ -31,6 +31,7 @@ const loadResourses = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
+  const promises = [];
   let srcLinks = [];
   let $;
   let linkForTasks;
@@ -51,7 +52,8 @@ const loadResourses = (filePath, url, fileName) => {
               log(`Filename is ${srcName}`);
               axios.get(downloadLink.href)
               // eslint-disable-next-line no-shadow
-                .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+                .then(({ data }) => promises
+                  .push(fsp.writeFile(path.join(dirPath, srcName), data)));
               log(`Download resourse from ${downloadLink.href}`);
               $(link).attr(attrName, `${dirName}/${srcName}`);
             }
@@ -63,7 +65,8 @@ const loadResourses = (filePath, url, fileName) => {
     .then(() => {
       log(`HTML filepath is ${htmlFilePath}`);
       console.log(`Page was succsessfully download into ${htmlFilePath}`);
-      return fsp.writeFile(htmlFilePath, $.html());
+      return fsp.writeFile(htmlFilePath, $.html())
+        .then(() => Promise.all(promises));
     });
 };
 
