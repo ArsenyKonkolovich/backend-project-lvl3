@@ -65,9 +65,9 @@ const loadResourses = (filePath, url, fileName) => {
     .then(() => {
       log(`HTML filepath is ${htmlFilePath}`);
       console.log(`Page was succsessfully download into ${htmlFilePath}`);
-      return fsp.writeFile(htmlFilePath, $.html())
-        .then(() => Promise.all(promises));
-    });
+      return fsp.writeFile(htmlFilePath, $.html());
+    })
+    .then(() => Promise.all(promises));
 };
 
 const downloadPage = (filePath, url) => {
