@@ -34,7 +34,7 @@ Options:
 ```
 
 ### Downloading
-[![asciicast](https://asciinema.org/a/s8buV7pek4rEsBzpi7dTsdlM0.svg)](https://asciinema.org/a/s8buV7pek4rEsBzpi7dTsdlM0)
+[![asciicast](https://asciinema.org/a/a5sYAGi3jWawIPX9QwSEMxl87.svg)](https://asciinema.org/a/a5sYAGi3jWawIPX9QwSEMxl87)
 
 ### Debug mode
 [![asciicast](https://asciinema.org/a/XjO8c6K5J5upIp9vb4Mt0vMOs.svg)](https://asciinema.org/a/XjO8c6K5J5upIp9vb4Mt0vMOs)
