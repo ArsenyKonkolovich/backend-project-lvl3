@@ -14,7 +14,7 @@ Page Loader is an utility for downloading a page and its resources. This project
 ## Getting started
 - Clone the repository
 ```cmd
-git clone git@github.com:ArsenyKonkolovich/backend-project-lvl3.git
+git clone https://github.com/ArsenyKonkolovich/backend-project-lvl3.git
 ```
 - Install dependencies
 ```cmd
