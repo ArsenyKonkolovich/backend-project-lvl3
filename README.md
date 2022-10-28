@@ -20,6 +20,7 @@ git clone https://github.com/ArsenyKonkolovich/backend-project-lvl3.git
 ```cmd
 make install
 ```
+- You need have node version - 17.9.0+
 
 ### Usage
 ```cmd
