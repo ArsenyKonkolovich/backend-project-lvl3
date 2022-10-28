@@ -57,7 +57,7 @@ const loadResourses = (filePath, url, fileName) => {
     .then(() => {
       localizeLinks($, resourcesToLocalize);
       log(`HTML filepath is ${htmlFilePath}`);
-      console.log(`Page was succsessfully download into ${htmlFilePath}`);
+      console.log(`Page was successfully downloaded into ${htmlFilePath}`);
       return fsp.writeFile(htmlFilePath, $.html());
     });
 };
