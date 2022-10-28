@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import axios from 'axios';
 import fsp from 'fs/promises';
 import path from 'path';
@@ -5,15 +6,12 @@ import * as cheerio from 'cheerio';
 import axiosDebug from 'axios-debug-log';
 import debug from 'debug';
 import Listr from 'listr';
-import { nameChanger, normalizeName, isDownloadable } from './util.js';
+// import { link } from 'fs';
+import {
+  nameChanger, normalizeName, getResoursesLinks, localizeLinks,
+} from './util.js';
 
 const log = debug('page-loader');
-
-const mapping = {
-  img: 'src',
-  script: 'src',
-  link: 'href',
-};
 
 axiosDebug({
   request(httpDebug, config) {
@@ -31,43 +29,33 @@ const loadResourses = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
-  const promises = [];
-  let srcLinks = [];
+  const resourcesToLocalize = [];
   let $;
-  let linkForTasks;
-  const tagNames = Object.keys(mapping);
   return axios.get(url)
     .then(({ data }) => {
       $ = cheerio.load(data);
-      tagNames.forEach((tagName) => {
-        const attrName = mapping[tagName];
-        srcLinks = $(tagName).toArray();
-        const tasks = new Listr(srcLinks
-          .map((link) => {
-            const srcLink = $(link).attr(attrName);
-            if (srcLink && isDownloadable(srcLink, url)) {
-              const downloadLink = new URL(srcLink, url);
-              linkForTasks = downloadLink.href;
-              const srcName = normalizeName(downloadLink);
-              log(`Filename is ${srcName}`);
-              axios.get(downloadLink.href)
-              // eslint-disable-next-line no-shadow
-                .then(({ data }) => promises
-                  .push(fsp.writeFile(path.join(dirPath, srcName), data)));
-              log(`Download resourse from ${downloadLink.href}`);
-              $(link).attr(attrName, `${dirName}/${srcName}`);
-            }
-            return { title: linkForTasks, task: () => tasks };
-          }));
-        return tasks.run();
-      });
+      const linkForDownload = getResoursesLinks($, url);
+      const tasks = new Listr(
+        linkForDownload.map((link) => {
+          const downloadLink = new URL(link, url);
+          const srcName = normalizeName(downloadLink);
+          const relativePath = `${dirName}/${srcName}`;
+          resourcesToLocalize.push([link, relativePath]);
+          log(`Filename is ${srcName}`);
+          const task = axios.get(downloadLink.href)
+            .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+          log(`Download resourse from ${downloadLink.href}`);
+          return { title: link, task: () => task };
+        }),
+      );
+      return tasks.run();
     })
     .then(() => {
+      localizeLinks($, resourcesToLocalize);
       log(`HTML filepath is ${htmlFilePath}`);
       console.log(`Page was succsessfully download into ${htmlFilePath}`);
       return fsp.writeFile(htmlFilePath, $.html());
-    })
-    .then(() => Promise.all(promises));
+    });
 };
 
 const downloadPage = (filePath, url) => {
