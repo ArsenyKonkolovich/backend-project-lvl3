@@ -58,7 +58,7 @@ const loadResourses = (filePath, url, fileName) => {
     });
 };
 
-const downloadPage = (filePath, url) => {
+const downloadPage = (url, filePath) => {
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
