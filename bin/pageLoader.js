@@ -13,6 +13,6 @@ program
   .arguments('<url>')
   .action((url) => {
     const options = program.opts();
-    downloadPage(url, options.output);
+    downloadPage(options.output, url);
   });
 program.parse(process.argv);
