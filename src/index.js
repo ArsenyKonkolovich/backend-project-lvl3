@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 import axios from 'axios';
+import { cwd } from 'node:process';
 import fsp from 'fs/promises';
 import path from 'path';
 import * as cheerio from 'cheerio';
@@ -66,9 +67,9 @@ const resourceProcessing = (filePath, url, fileName) => {
     });
 };
 
-const downloadPage = (url, filePath) => {
+const downloadPage = (url, filePath = cwd()) => {
   const fileName = nameChanger(url);
-  const resultPath = path.join(filePath.toString(), fileName.toString());
+  const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .then(() => resourceProcessing(`${resultPath}`, url, fileName))
     .catch((error) => {
