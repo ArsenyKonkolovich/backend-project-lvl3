@@ -6,7 +6,7 @@ import * as cheerio from 'cheerio';
 import axiosDebug from 'axios-debug-log';
 import debug from 'debug';
 import Listr from 'listr';
-// import { link } from 'fs';
+import prettier from 'prettier';
 import {
   nameChanger, normalizeName, getResoursesLinks, localizeLinks,
 } from './util.js';
@@ -58,7 +58,7 @@ const loadResourses = (filePath, url, fileName) => {
       localizeLinks($, resourcesToLocalize);
       log(`HTML filepath is ${htmlFilePath}`);
       console.log(`Page was successfully downloaded into ${htmlFilePath}`);
-      return fsp.writeFile(htmlFilePath, $.html());
+      return fsp.writeFile(htmlFilePath, prettier.format($.html(), { parser: 'html' }));
     });
 };
 
