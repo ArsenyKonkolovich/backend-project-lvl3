@@ -25,7 +25,14 @@ axiosDebug({
   },
 });
 
-const loadResourses = (filePath, url, fileName) => {
+const downloadResourses = (downloadLink, dirPath, srcName, link) => {
+  const task = axios.get(downloadLink)
+    .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+  log(`Download resourse from ${downloadLink.href}`);
+  return { title: link, task: () => task };
+};
+
+const resourceProcessing = (filePath, url, fileName) => {
   const dirName = `${fileName}_files`;
   const dirPath = `${filePath}_files`;
   const htmlFilePath = `${filePath}.html`;
@@ -46,10 +53,7 @@ const loadResourses = (filePath, url, fileName) => {
           const relativePath = `${dirName}/${srcName}`;
           resourcesToLocalize.push([link, relativePath]);
           log(`Filename is ${srcName}`);
-          const task = axios.get(downloadLink.href)
-            .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
-          log(`Download resourse from ${downloadLink.href}`);
-          return { title: link, task: () => task };
+          return downloadResourses(downloadLink.href, dirPath, srcName, link);
         }),
       );
       return tasks.run();
@@ -66,7 +70,7 @@ const downloadPage = (url, filePath) => {
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
-    .then(() => loadResourses(`${resultPath}`, url, fileName))
+    .then(() => resourceProcessing(`${resultPath}`, url, fileName))
     .catch((error) => {
       console.error(`Sorry, download error: ${error.message} ${error.code}`);
       throw error;
