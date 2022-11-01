@@ -68,7 +68,7 @@ const resourceProcessing = (filePath, url, fileName) => {
 
 const downloadPage = (url, filePath) => {
   const fileName = nameChanger(url);
-  const resultPath = path.join(filePath, fileName);
+  const resultPath = path.join(filePath.toString(), fileName.toString());
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
     .then(() => resourceProcessing(`${resultPath}`, url, fileName))
     .catch((error) => {
