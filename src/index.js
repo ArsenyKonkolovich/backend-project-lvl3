@@ -79,3 +79,4 @@ const downloadPage = (url, filePath = cwd()) => {
 };
 
 export default downloadPage;
+
