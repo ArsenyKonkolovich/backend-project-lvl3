@@ -34,6 +34,9 @@ export const normalizeName = (url) => {
   const nameForChange = `${path.parse(url.href).dir}/${path.parse(url.href).name}`;
   const nameWhithOutExt = nameChanger(nameForChange);
   const resultName = `${nameWhithOutExt}${path.parse(url.href).ext}`;
+  if (path.parse(url.href).ext === '') {
+    return `${resultName}.html`;
+  }
   log(`Filename is ${resultName}`);
   return resultName;
 };
