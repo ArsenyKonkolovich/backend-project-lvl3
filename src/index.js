@@ -27,7 +27,10 @@ axiosDebug({
 
 const downloadResourses = (downloadLink, dirPath, srcName, link) => {
   const task = axios.get(downloadLink)
-    .then(({ data }) => fsp.writeFile(path.join(dirPath, srcName), data));
+    .then(({ data }) => {
+      const formatData = (path.parse(srcName).ext === '.css') ? prettier.format(data, { parser: 'html' }) : data;
+      return fsp.writeFile(path.join(dirPath, srcName), formatData);
+    });
   log(`Download resourse from ${downloadLink.href}`);
   return { title: link, task: () => task };
 };
