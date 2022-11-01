@@ -18,10 +18,10 @@ const tagNames = Object.keys(mapping);
 export const localizeLinks = ($, resourcesToLocalize) => {
   tags.forEach((tag) => {
     $(tag).each(function a() {
-      resourcesToLocalize.forEach(([link, filepath]) => {
+      resourcesToLocalize.forEach(({ link, relativePath }) => {
         const tagAttr = tagAttrs.filter((el) => $(this).attr(el)).join('');
         if ($(this).attr(tagAttr) === link) {
-          $(this).attr(tagAttr, filepath);
+          $(this).attr(tagAttr, relativePath);
         }
       });
     });

@@ -54,7 +54,7 @@ const resourceProcessing = (filePath, url, fileName) => {
           const downloadLink = new URL(link, url);
           const srcName = normalizeName(downloadLink);
           const relativePath = `${dirName}/${srcName}`;
-          resourcesToLocalize.push([link, relativePath]);
+          resourcesToLocalize.push({ link, relativePath });
           log(`Filename is ${srcName}`);
           return downloadResourses(downloadLink.href, dirPath, srcName, link);
         }),
