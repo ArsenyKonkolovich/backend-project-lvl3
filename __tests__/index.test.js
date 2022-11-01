@@ -53,7 +53,7 @@ test('Download page', async () => {
   const actualImageData = imagedata;
   const actualCssData = cssData;
   const actualjsData = jsData;
-  await downloadPage(tmpFilePath, 'https://ru.hexlet.io/courses');
+  await downloadPage('https://ru.hexlet.io/courses', tmpFilePath);
   const expectedChangedata = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses.html'), 'utf-8');
   const expectedJsData = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-packs-js-runtime.js'), 'utf-8');
   const expectedImageData = await fsp.readFile(path.join(tmpFilePath, 'ru-hexlet-io-courses_files', 'ru-hexlet-io-assets-professions-nodejs.png'), 'utf-8');
@@ -74,9 +74,9 @@ describe('Throwed exceptions', () => {
       .get(/500/)
       .reply(500);
 
-    await expect(downloadPage(receivedDirname, 'https://foo.bar.baz/no-response')).rejects.toThrow('getaddrinfo ENOTFOUND foo.bar.baz');
-    await expect(downloadPage(receivedDirname, 'https://foo.bar.baz/404')).rejects.toThrow('Request failed with status code 404');
-    await expect(downloadPage(receivedDirname, 'https://foo.bar.baz/500')).rejects.toThrow('Request failed with status code 500');
+    await expect(downloadPage('https://foo.bar.baz/no-response', receivedDirname)).rejects.toThrow('getaddrinfo ENOTFOUND foo.bar.baz');
+    await expect(downloadPage('https://foo.bar.baz/404', receivedDirname)).rejects.toThrow('Request failed with status code 404');
+    await expect(downloadPage('https://foo.bar.baz/500', receivedDirname)).rejects.toThrow('Request failed with status code 500');
   });
 
   test('Fs errors', async () => {
@@ -85,7 +85,7 @@ describe('Throwed exceptions', () => {
       .twice()
       .reply(200);
 
-    await expect(downloadPage('/sys', 'https://example.com')).rejects.toThrow("EACCES: permission denied, mkdir '/sys/example-com_files'");
-    await expect(downloadPage('/notExistingFolder', 'https://example.com')).rejects.toThrow("EACCES: permission denied, mkdir '/notExistingFolder'");
+    await expect(downloadPage('https://example.com', '/sys')).rejects.toThrow("EACCES: permission denied, mkdir '/sys/example-com_files'");
+    await expect(downloadPage('https://example.com', '/notExistingFolder')).rejects.toThrow("EACCES: permission denied, mkdir '/notExistingFolder'");
   });
 });
