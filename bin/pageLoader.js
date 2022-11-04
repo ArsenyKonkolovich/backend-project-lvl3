@@ -12,6 +12,9 @@ program
   .arguments('<url>')
   .action((url) => {
     const options = program.opts();
-    downloadPage(url, options.output);
+    downloadPage(url, options.output)
+      .catch(() => {
+        process.exit(1);
+      });
   });
 program.parse(process.argv);
