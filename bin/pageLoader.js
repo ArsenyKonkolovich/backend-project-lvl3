@@ -15,7 +15,7 @@ program
     downloadPage(url, options.output)
       .catch((error) => {
         console.error(`Sorry, download error: ${error.message} ${error.code}`);
-        throw error;
+        process.exit(1);
       });
   });
 program.parse(process.argv);
