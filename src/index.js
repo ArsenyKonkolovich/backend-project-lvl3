@@ -45,7 +45,6 @@ const resourceProcessing = (filePath, url, fileName) => {
       const linkForDownload = getResoursesLinks($, url);
       if (linkForDownload.length === 0) {
         console.error('No resourses for download');
-        process.exit(1);
       }
       const tasks = new Listr(
         linkForDownload.map((link) => {
