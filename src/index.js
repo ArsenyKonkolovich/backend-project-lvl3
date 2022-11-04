@@ -70,11 +70,11 @@ const downloadPage = (url, filePath = cwd()) => {
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
   return fsp.mkdir(`${resultPath}_files`, { recursive: true })
-    .then(() => resourceProcessing(`${resultPath}`, url, fileName))
-    .catch((error) => {
-      console.error(`Sorry, download error: ${error.message} ${error.code}`);
-      throw error;
-    });
+    .then(() => resourceProcessing(`${resultPath}`, url, fileName));
+  // .catch((error) => {
+  //   console.error(`Sorry, download error: ${error.message} ${error.code}`);
+  //   throw error;
+  // });
 };
 
 export default downloadPage;

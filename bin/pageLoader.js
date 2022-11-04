@@ -13,8 +13,9 @@ program
   .action((url) => {
     const options = program.opts();
     downloadPage(url, options.output)
-      .catch(() => {
-        process.exit(1);
+      .catch((error) => {
+        console.error(`Sorry, download error: ${error.message} ${error.code}`);
+        throw error;
       });
   });
 program.parse(process.argv);
