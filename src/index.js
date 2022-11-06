@@ -66,7 +66,7 @@ const resourceProcessing = (filePath, url, fileName) => {
     });
 };
 
-const downloadPage = (url, filePath) => {
+const downloadPage = (url, filePath = cwd()) => {
   console.log('CWD', cwd());
   const fileName = nameChanger(url);
   const resultPath = path.join(filePath, fileName);
