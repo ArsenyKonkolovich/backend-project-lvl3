@@ -74,10 +74,6 @@ const downloadPage = (url, filePath = cwd()) => {
     .catch(() => fsp.mkdir(filePath, { recursive: true }))
     .then(() => fsp.mkdir(`${resultPath}_files`, { recursive: true }))
     .then(() => resourceProcessing(`${resultPath}`, url, fileName));
-  // .catch((error) => {
-  //   console.error(`Sorry, download error: ${error.message} ${error.code}`);
-  //   throw error;
-  // });
 };
 
 export default downloadPage;
