@@ -67,8 +67,11 @@ const resourceProcessing = (filePath, url, fileName) => {
 };
 
 const downloadPage = (url, filePath = cwd()) => {
+  console.log('CWD', cwd());
   const fileName = nameChanger(url);
-  const resultPath = path.join(filePath, fileName);
+  // const resultPath = path.join(filePath, fileName);
+  const resultPath = `${filePath}/${fileName}`;
+  console.log('Resultpath', resultPath);
   return fsp.access(filePath)
     .catch(() => fsp.mkdir(filePath, { recursive: true }))
     .then(() => fsp.mkdir(`${resultPath}_files`, { recursive: true }))
