@@ -8,7 +8,7 @@ const program = new Command();
 program
   .version('0.0.1', '-V, --version', 'output the version number')
   .description('Page loader utility')
-  .option('-o, --output [dir]', 'output dir', 'output dir (default: "/home/user/current-dir")')
+  .option('-o, --output [dir]', 'output dir (default: "/home/user/current-dir")', process.cwd())
   .arguments('<url>')
   .action((url) => {
     const options = program.opts();
